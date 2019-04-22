@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <script type="text/javascript">
+      function scan() {
+        var req = new XMLHttpRequest();
+        var result = document.getElementById('result');
+        req.onreadystatechange = function()
+        {
+          if(this.readyState == 4 && this.status == 200) {
+            result.innerHTML = this.responseText;
+          } else {
+            result.innerHTML = "処理中...";
+          }
+        }
+        req.open('POST', '/', true);
+        req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        req.send("IP="+document.getElementById('IP').value);
+      }
+      </script>
+  </head>
+        <body>
+                  <form>
+                   <p>IP <input type="text" id="IP" value=""></p>
+                    <input type="button" value="scan" onclick="scan();">
+
+                  <div id='result'> </div>
+                  </form>
+        </body>
+</html>

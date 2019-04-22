@@ -3,7 +3,7 @@ from scapy.all import *
 import sys
 import threading
 
-dip='192.168.80.130'
+dip='192.168.0.113'
 startp=1
 endp=100
 t_num=4   #线程数
