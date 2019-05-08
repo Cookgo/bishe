@@ -1,19 +1,37 @@
 <!DOCTYPE html>
 <html>
   <head>
-      <script type="text/javascript">
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script>
+
       function scan() {
         var req = new XMLHttpRequest();
-        var result = document.getElementById('result');
+
         req.onreadystatechange = function()
         {
           if(this.readyState == 4 && this.status == 200) {
-            result.innerHTML = this.responseText;
+            $("#result").text("")
+            var temp=JSON.parse(this.responseText);
+            var i=1
+
+            for(var p in temp)
+            {
+                var res=temp[p].split('-')
+                var newRow = "<tr><td>p</td><td>res[0]</td><td>res[1]</td><td>res[2]</td><td>res[3]</td></tr>";
+                $("table tr:last").after(newRow);
+                $('table').find("tr").eq(i).find("td").eq(0).text(p)
+                $('table').find("tr").eq(i).find("td").eq(1).text(res[0])
+                $('table').find("tr").eq(i).find("td").eq(2).text(res[1])
+                $('table').find("tr").eq(i).find("td").eq(3).text(res[2])
+                $('table').find("tr").eq(i).find("td").eq(4).text(res[3])
+                i++
+
+            }
           } else {
-            result.innerHTML = "処理中...";
+            $("#result").text("処理中...");
           }
         }
-        req.open('POST', '/', true);
+        req.open('POST', '/A_scan', true);
         req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
         req.send("IP="+document.getElementById('IP').value);
       }
@@ -26,5 +44,18 @@
 
                   <div id='result'> </div>
                   </form>
+                  <p></p>
+                  <p></p>
+                  <table border="6" id="scan_result">
+                      <caption> scan result</caption>
+                        <tr>
+                         <th>端口号</th>
+                         <th>协议</th>
+                         <th>服务</th>
+                         <th>软件</th>
+                         <th>版本</th>
+                        </tr>
+
+                  </table>
         </body>
 </html>
