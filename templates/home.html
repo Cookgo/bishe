@@ -3,19 +3,19 @@
   <head>
       <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
       <script>
+      function scan(){
 
-      function scan() {
         var req = new XMLHttpRequest();
-
+        result=document.getElementById('result')
+        $("table  tr:not(:first)").empty("");
         req.onreadystatechange = function()
         {
-          if(this.readyState == 4 && this.status == 200) {
-            $("#result").text("")
+          if(this.readyState == 4 && this.status == 200){
+
             var temp=JSON.parse(this.responseText);
             var i=1
-
-            for(var p in temp)
-            {
+            $("#result").text('')
+            for(var p in temp){
                 var res=temp[p].split('-')
                 var newRow = "<tr><td>p</td><td>res[0]</td><td>res[1]</td><td>res[2]</td><td>res[3]</td></tr>";
                 $("table tr:last").after(newRow);
@@ -25,16 +25,31 @@
                 $('table').find("tr").eq(i).find("td").eq(3).text(res[2])
                 $('table').find("tr").eq(i).find("td").eq(4).text(res[3])
                 i++
-
             }
           } else {
             $("#result").text("処理中...");
+            result.innerHTML="処理中..."
           }
         }
         req.open('POST', '/A_scan', true);
         req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
         req.send("IP="+document.getElementById('IP').value);
       }
+       function brute(){
+        $.get("/brute",function(data,status){
+            $('#sec').text("处理中")
+            if(status=='success'){
+            $('#sec').text(data)
+            }
+            else{
+            $('#sec').text("失败")
+            }
+
+        }
+        )
+
+      }
+
       </script>
   </head>
         <body>
@@ -55,7 +70,17 @@
                          <th>软件</th>
                          <th>版本</th>
                         </tr>
-
                   </table>
+
+                    <p> </p>
+                    <p> </p>
+                  <form>
+                    <input type="button" value="爆破测试" onclick="brute();">
+                    <div id="sec"></div>
+                  </form>
+
+
+
+
         </body>
 </html>

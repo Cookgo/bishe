@@ -4,7 +4,9 @@ import nmap
 import json
 app = Flask(__name__)
 app.debug = True
-
+ser={}
+t=set()
+u=set()
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -38,6 +40,10 @@ def proc():
             service[udp] = nm[IP]['udp'][udp]['name']
             solfware[udp]= nm[IP]['udp'][udp]['product']
             version[udp]= nm[IP]['udp'][udp]['version']
+    ser=service
+    t=tcpport
+    u=udpport
+
     # print(port)
     # print(service)
     # print(solfware)
@@ -49,7 +55,23 @@ def proc():
     result = json.dumps(result)
     return result
 
+@app.route('/ftp_brute')
+def brute():
+    result=ftp_brute()
+    result = json.dumps(result)
+    return result
 
+@app.route('/ssh_brute')
+def brute():
+    result=sshp_brute()
+    result = json.dumps(result)
+    return result
+
+@app.route('/syn_flood')
+def brute():
+    result=syn_flood()
+    result = json.dumps(result)
+    return result
 
 
 

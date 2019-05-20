@@ -4,17 +4,11 @@ def callback(pkt):
     if pkt.haslayer(TCP):
         if pkt[TCP].payload:
             data=pkt[TCP].payload
-            # pkt.show()
-            # pkt.show()
-            # print(type(data))
+
             data=str(data)
-            # print(type(data))
-            str1=data[2:-1]
-            str1 =eval("u"+"\""+str1+"\"")
-            str1.decode('utf-8')
-            print(type(str1))
-            print(str1)
-            # print(str1.decode('unicode'))
+            print(type(data))
+            print(data)
+
 
 
 
