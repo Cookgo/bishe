@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a26f53f9-2ad1-486b-8963-b0b4cf221d78" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/plain_sniff.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/syn_flood.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/bishe.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/bishe.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UI.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo.pcap" beforeDir="false" afterPath="$PROJECT_DIR$/demo.pcap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ftp_force.py" beforeDir="false" afterPath="$PROJECT_DIR$/ftp_force.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plaintext_sniff.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssh.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssh.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssh_force.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssh_force.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web.py" beforeDir="false" afterPath="$PROJECT_DIR$/web.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/邓克厘毕设.docx" beforeDir="false" afterPath="$PROJECT_DIR$/邓克厘毕设.docx" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -115,7 +102,7 @@
         <entry file="file://$PROJECT_DIR$/integrate.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="275">
-              <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+              <caret line="62" selection-start-line="62" selection-end-line="62" />
             </state>
           </provider>
         </entry>
@@ -170,8 +157,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="183" />
-    <option name="y" value="46" />
+    <option name="x" value="56" />
+    <option name="y" value="14" />
     <option name="width" value="1187" />
     <option name="height" value="804" />
   </component>
@@ -183,6 +170,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -203,7 +191,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -362,7 +349,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="183" y="46" width="1187" height="804" extended-state="0" />
+    <frame x="56" y="14" width="1187" height="804" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4732297" visible="true" weight="0.21409921" />
@@ -598,7 +585,7 @@
     <entry file="file://$PROJECT_DIR$/integrate.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="275">
-          <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="62" />
+          <caret line="62" selection-start-line="62" selection-end-line="62" />
         </state>
       </provider>
     </entry>
