@@ -43,12 +43,12 @@ def proc():
     ser=service
     t=tcpport
     u=udpport
-
+    result = {}
     # print(port)
     # print(service)
     # print(solfware)
     # print(version)
-    result={}
+
     for p in port:
         result[p]=protocol[p]+'-'+service[p]+'-'+solfware[p]+'-'+version[p]
     print(result)
