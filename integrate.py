@@ -61,17 +61,17 @@ def brute():
     result = json.dumps(result)
     return result
 
-@app.route('/ssh_brute')
-def brute():
-    result=sshp_brute()
-    result = json.dumps(result)
-    return result
-
-@app.route('/syn_flood')
-def brute():
-    result=syn_flood()
-    result = json.dumps(result)
-    return result
+# @app.route('/ssh_brute')
+# def brute():
+#     result=sshp_brute()
+#     result = json.dumps(result)
+#     return result
+#
+# @app.route('/syn_flood')
+# def brute():
+#     result=syn_flood()
+#     result = json.dumps(result)
+#     return result
 
 
 

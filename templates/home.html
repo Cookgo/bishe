@@ -35,8 +35,8 @@
         req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
         req.send("IP="+document.getElementById('IP').value);
       }
-       function brute(){
-        $.get("/brute",function(data,status){
+       function ftp_brute(){
+        $.get("/ftp_brute",function(data,status){
             $('#sec').text("处理中")
             if(status=='success'){
             $('#sec').text(data)
@@ -75,7 +75,7 @@
                     <p> </p>
                     <p> </p>
                   <form>
-                    <input type="button" value="爆破测试" onclick="brute();">
+                    <input type="button" value="FTP爆破测试" onclick="brute();">
                     <div id="sec"></div>
                   </form>
 
