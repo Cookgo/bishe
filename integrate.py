@@ -1,7 +1,9 @@
 #! -*- coding:utf-8 -*-
 from flask import Flask, request, render_template
-import nmap
 import json
+import re
+import complete
+
 app = Flask(__name__)
 app.debug = True
 ser={}
@@ -12,54 +14,44 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/A_scan', methods=['POST'])
+@app.route('/complete_scan', methods=['POST'])
 def proc():
+    temp=request.form['port']
+    temp=temp.replace(' ','')
+    temp = re.split(r',',temp)
+    thread_num=request.form['thread_num']
+    thread_num=int(thread_num)
     IP=request.form['IP']
-    print(IP)
-    nm = nmap.PortScanner()
-    nm.scan(IP, '1-30 ')
-    tcpport = nm[IP].all_tcp()
-    udpport = nm[IP].all_udp()
-    port=set()
-    protocol = {}
-    service={}
-    solfware={}
-    version={}
+    # print(temp)
 
-    for tcp in tcpport:
-        if nm[IP]['tcp'][tcp]['state'] == 'open':
-            port.add(tcp)
-            protocol[tcp]='tcp'
-            service[tcp]=nm[IP]['tcp'][tcp]['name']
-            solfware[tcp]=nm[IP]['tcp'][tcp]['product']
-            version[tcp]=nm[IP]['tcp'][tcp]['version']
-    for udp in udpport:
-        if nm[IP]['udp'][udp]['state'] == 'open':
-            port.add(udp)
-            protocol[udp] = 'udp'
-            service[udp] = nm[IP]['udp'][udp]['name']
-            solfware[udp]= nm[IP]['udp'][udp]['product']
-            version[udp]= nm[IP]['udp'][udp]['version']
-    ser=service
-    t=tcpport
-    u=udpport
-    result = {}
-    # print(port)
-    # print(service)
-    # print(solfware)
-    # print(version)
+    scan_port=set()
+    for t in temp:
+        i=temp.index(t)
+        if re.match(r'\w+-\w+',t):
+            s=t.split('-')
+            start=int(s[0])
+            end=int(s[1])
+            temp_port=set(range(start,end+1))
+            scan_port=scan_port|temp_port
+            temp.pop(i)
+    temp=list(map(int,temp))
+    temp=set(temp)
+    scan_port=set(scan_port)
+    scan_port=scan_port|set(temp)
+    print(scan_port)
+    complete.muti_scan(IP,scan_port,thread_num)
+    print(complete.result)
+    result=json.dumps(complete.result)
+    return(result)
 
-    for p in port:
-        result[p]=protocol[p]+'-'+service[p]+'-'+solfware[p]+'-'+version[p]
-    print(result)
-    result = json.dumps(result)
-    return result
 
-@app.route('/ftp_brute')
+
+
+@app.route('/ftp_brute',methods=['POST'])
 def brute():
-    result=ftp_brute()
-    result = json.dumps(result)
-    return result
+    ip=request.form['IP']
+    print(ip)
+    return ip
 
 # @app.route('/ssh_brute')
 # def brute():

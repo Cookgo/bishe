@@ -3,18 +3,25 @@
   <head>
       <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
       <script>
-      function scan(){
 
-        var req = new XMLHttpRequest();
-        result=document.getElementById('result')
+      function scan(){
+        data="IP="+document.getElementById('IP').value+"&"+"port="+document.getElementById('port').value+"&"+"thread_num="+document.getElementById('thread_num').value
+        $('#tips').text('正在扫描: '+$('#IP').val()+'  '+$('#port').val()+'     并发数: '+$('#thread_num').val()+' ......')
+        $('#IP').val('')
+        $('#port').val('')
+        $('#thread_num').val('')
         $("table  tr:not(:first)").empty("");
+        var req = new XMLHttpRequest();
         req.onreadystatechange = function()
         {
           if(this.readyState == 4 && this.status == 200){
-
+            $('#tips').text('')
+            $("#complete").val("完全扫描")
+            $("#complete").attr("disabled",false);
+            $("#fast").attr("disabled",false);
             var temp=JSON.parse(this.responseText);
             var i=1
-            $("#result").text('')
+
             for(var p in temp){
                 var res=temp[p].split('-')
                 var newRow = "<tr><td>p</td><td>res[0]</td><td>res[1]</td><td>res[2]</td><td>res[3]</td></tr>";
@@ -27,42 +34,53 @@
                 i++
             }
           } else {
-            $("#result").text("処理中...");
-            result.innerHTML="処理中..."
+            $("#complete").val("处理中")
+            $("#complete").attr("disabled","true");
+            $("#fast").attr("disabled","true");
+
           }
         }
-        req.open('POST', '/A_scan', true);
+        req.open('POST', '/complete_scan', true);
         req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-        req.send("IP="+document.getElementById('IP').value);
+        req.send(data);
       }
+
+
        function ftp_brute(){
-        $.get("/ftp_brute",function(data,status){
-            $('#sec').text("处理中")
-            if(status=='success'){
-            $('#sec').text(data)
-            }
-            else{
-            $('#sec').text("失败")
-            }
+        
+        str={};
+        str['IP']=$('#IP').val()
+        str['port']=$('#port').val()
+        // alert(str['port'])
 
-        }
-        )
+        $.ajax({
+            type: 'POST',
+            url: '/ftp_brute',
+            data: str,
+            success: function(data) {
+                $('#test_result').val(data)
 
+            },
+            error: function(xhr, type) {
+            $('#test_result').val('请求出错')
+            }
+});
       }
 
       </script>
   </head>
         <body>
                   <form>
-                   <p>IP <input type="text" id="IP" value=""></p>
-                    <input type="button" value="scan" onclick="scan();">
-
-                  <div id='result'> </div>
+                   <p>IP <input type="text" id="IP" value="">  端口<input type="text" id="port" value="">  线程数<input type="text" id="thread_num" value=""> 最长时间(min)<input type="text" id="overtime" value=""></p>
+                    <input type="button" id="complete" value="完全扫描" onclick="scan();">     <input type="button" id='fast' value="快速扫描" onclick="fast_scan();">
+                      <p> </p>
+                      <p id="tips"> </p>
+                  <div id='scan_result'> </div>
                   </form>
                   <p></p>
                   <p></p>
                   <table border="6" id="scan_result">
-                      <caption> scan result</caption>
+                      <caption> 扫描结果</caption>
                         <tr>
                          <th>端口号</th>
                          <th>协议</th>
@@ -75,8 +93,9 @@
                     <p> </p>
                     <p> </p>
                   <form>
-                    <input type="button" value="FTP爆破测试" onclick="brute();">
-                    <div id="sec"></div>
+                    <input type="button" value="FTP爆破测试" id="ftp_force" onclick="ftp_brute();"> <input type="button" value="SSH爆破测试" id="ssh_force"  onclick="ssh_brute();"> <input type="button" value="DOS攻击测试" id="dos_attack"  onclick="syn_flood();">
+                      <p>               测试结果</p>
+                      <input type="text" id="test_result" readonly>
                   </form>
 
 

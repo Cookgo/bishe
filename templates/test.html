@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+ 
+	<head>
+		<title>JQuery获取文本框的值</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+		
+		<script type="text/javascript">
+		//使用id的方式获取
+		$(document).ready(function(){
+			//1
+			$("#button_text1").click(function(){
+				var result1 = $("#input_text1").val();
+				alert("result1 = " + result1);
+			});
+			//2
+			$("#button_text2").click(function(){
+				var result2 = $("input[id='input_text2']").val();
+				alert("result2 = " + result2);
+			});
+			//3
+			$("#button_text3").click(function(){
+				var result3 = $("input[id='input_text3']").attr("value");
+				alert("result3 = " + result3);
+			});
+			//4. 可以通过type的值来获取input中的值（未演示）
+			/*
+			$("#button_text4").click(function(){
+				var result4 = $("input[type='text']").val();
+				alert("result4 = " + result4);
+			});
+			*/
+			//5. 可以通过name的值来获取input中的值（未演示）
+			/*
+			$("#button_text5").click(function(){
+				var result5 = $("input[name='text']").val();
+				alert("result5 = " + result5);
+			});			
+			*/
+		});
+		</script>
+	</head>
+ 
+	<body>
+		<!-- 获取文本框的值：方式一 -->
+		<div id="test1">
+			<input id="input_text1" type="text" value="test1" style="width: 100px;" />
+			<button id="button_text1">test1</button>
+		</div>
+		<!-- 获取文本框的值：方式二 -->
+		<div id="test2">
+			<input id="input_text2" type="text" value="test2" style="width: 100px;" />
+			<button id="button_text2">test2</button>
+		</div>
+		<!-- 获取文本框的值：方式三 -->
+		<div id="test3">
+			<input id="input_text3" type="text" value="test3" style="width: 100px;" />
+			<button id="button_text3">test3</button>
+		</div>
+	</body>
+ 
+</html>
