@@ -3,7 +3,9 @@ from flask import Flask, request, render_template
 import json
 import re
 import complete
-
+import ftp_force
+import ssh_force
+import nmap
 app = Flask(__name__)
 app.debug = True
 ser={}
@@ -14,7 +16,7 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/complete_scan', methods=['POST'])
+@app.route('/scan', methods=['POST'])
 def proc():
     temp=request.form['port']
     temp=temp.replace(' ','')
@@ -48,17 +50,65 @@ def proc():
 
 
 @app.route('/ftp_brute',methods=['POST'])
-def brute():
-    ip=request.form['IP']
-    print(ip)
-    return ip
+def f_brute():
+    IP=request.form['IP']
+    port=int(request.form['port'])
+    thread_num=int(request.form['thread_num'])
+    print(IP)
+    print(port)
+    print(thread_num)
 
-# @app.route('/ssh_brute')
-# def brute():
-#     result=sshp_brute()
-#     result = json.dumps(result)
-#     return result
-#
+    nm=nmap.PortScanner()
+    p=str(port)
+    nm.scan(IP,p)
+    if nm[IP]['tcp'][port]['name']!='ftp':
+        return '该端口没有ftp服务'
+
+    ftp_force.brute(thread_num,IP,port)
+    print(ftp_force.result)
+    ftp_force.result['tip0']='FTP服务爆破测试结果：\n  主机：'+IP+','+'端口: '+str(port)+'。\n'
+    if ftp_force.result['count']>100:
+        ftp_force.result['tip2']='  共尝试登录：'+str(ftp_force.result['count'])+'次，尝试次数超过100次，存在可爆破风险，建议增加一定限制措施，比如同一ip不能在短时间尝试过多次数等。\n'
+    else:
+        ftp_force.result['tip2'] = '  共尝试登录：' + str(ftp_force.result['count']) + '次，尝试次数无法超过100次，没有遭受爆破攻击风险。'
+    if 'username' in ftp_force.result:
+        ftp_force.result['tip1']='  破解成功,' + '用户名：' + str(ftp_force.result['username']) + ' 密码：'+ str(ftp_force.result['password'])+  ',存在若口令缺陷，建议使用强密码，即数字、字母以及特殊符号混合的密码。\n'
+    else:
+        ftp_force.result['tip1']='  破解失败，密码复杂，爆破难度较高。\n'
+    result=ftp_force.result['tip0']+ftp_force.result['tip1']+ftp_force.result['tip2']
+    print(result)
+    # result=json.dumps(result)
+    return result
+
+@app.route('/ssh_brute',methods=['POST'])
+def s_brute():
+    IP=request.form['IP']
+    port=int(request.form['port'])
+    thread_num=int(request.form['thread_num'])
+    print(IP)
+    print(port)
+    print(thread_num)
+
+    nm = nmap.PortScanner()
+    p = str(port)
+    nm.scan(IP, p)
+    if nm[IP]['tcp'][port]['name'] != 'ssh':
+        return '该端口没有ssh服务'
+
+    ssh_force.brute(thread_num,IP,port)
+    ssh_force.result['tip0']='SSH服务爆破测试结果：\n  主机:'+IP+','+'端口: '+str(port)+'。\n'
+    if ssh_force.result['count']>100:
+        ssh_force.result['tip2']='  共尝试登录：'+str(ssh_force.result['count'])+'次，尝试次数超过100次，存在可爆破风险，建议增加一定限制措施，比如同一ip不能在短时间尝试过多次数等。\n'
+    else:
+        ssh_force.result['tip2'] = '  共尝试登录：' + str(ssh_force.result['count']) + '次，尝试次数无法超过100次，没有遭受爆破攻击风险。'
+    if 'username' in ssh_force.result:
+        ssh_force.result['tip1']='  破解成功,' + '用户名：' + str(ssh_force.result['username']) + ' 密码：'+ str(ssh_force.result['password'])+  ',存在若口令缺陷，建议使用强密码，即数字、字母以及特殊符号混合的密码。\n'
+    else:
+        ssh_force.result['tip1']='  破解失败，密码复杂，爆破难度较高。\n'
+    result=ssh_force.result['tip0']+ssh_force.result['tip1']+ssh_force.result['tip2']
+    print(result)
+    return result
+
 # @app.route('/syn_flood')
 # def brute():
 #     result=syn_flood()
@@ -68,4 +118,5 @@ def brute():
 
 
 if __name__ == '__main__':
+    # app.config['JSON_AS_ASCII'] = False
     app.run()

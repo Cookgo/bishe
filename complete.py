@@ -45,9 +45,10 @@ def scan(IP, p):
 
 def muti_scan(IP, p, thread_num):
     name = []
-    if thread_num > 0:
+    times = int(len(p) / thread_num)
+    if thread_num > 0 and times>20:
+
         p = list(p)
-        times = int(len(p) / thread_num)
         for i in range(thread_num):
             t = threading.Thread(target=scan, args=(IP, p[i * times:(i + 1) * times]))
             t.start()
@@ -55,11 +56,11 @@ def muti_scan(IP, p, thread_num):
             # print(t)
         for i in range(thread_num):
             name[i].join()
+        if p[thread_num * times:]:
+            scan(IP, p[thread_num * times:])
     else:
         scan(IP, p)
 
-    if p[thread_num * times:]:
-        scan(IP, p[thread_num * times:])
 
 # print(result)
 
