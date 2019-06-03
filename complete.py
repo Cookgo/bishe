@@ -8,6 +8,7 @@ lock = threading.Lock()
 
 
 def scan(IP, p):
+
     global result
     global lock
     p = str(p)
@@ -16,6 +17,7 @@ def scan(IP, p):
     nm.scan(IP, p)
     # print(id(nm))
     tcpport = nm[IP].all_tcp()
+    print(tcpport)
     udpport = nm[IP].all_udp()
     port = set()
     protocol = {}
@@ -24,6 +26,7 @@ def scan(IP, p):
     version = {}
 
     for tcp in tcpport:
+
         if nm[IP]['tcp'][tcp]['state'] == 'open':
             port.add(tcp)
             protocol[tcp] = 'tcp'
@@ -68,8 +71,11 @@ def muti_scan(IP, p, thread_num):
 
 
 
+
+
 # print(result)
 
 if __name__ == '__main__':
-    pass
+    scan('192.168.80.130',[0])
+    print(result)
 
