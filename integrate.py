@@ -6,6 +6,7 @@ import complete
 import ftp_force
 import ssh_force
 import nmap
+import dos
 app = Flask(__name__)
 app.debug = True
 ser={}
@@ -109,11 +110,18 @@ def s_brute():
     print(result)
     return result
 
-# @app.route('/syn_flood')
-# def brute():
-#     result=syn_flood()
-#     result = json.dumps(result)
-#     return result
+@app.route('/dos_test',methods=['POST'])
+def dos_test():
+    IP = request.form['IP']
+    print(IP)
+    port = int(request.form['port'])
+    print(port)
+    dos.syn_test(IP,port)
+    if dos.flag:
+        return 'DOS测试结果\n  经测试，发送一个syn包，收到超过4个syn ack包，存在syn泛洪攻击的可能。'
+    else:
+        return 'DOS测试结果\n  经测试，发送一个syn包，收到不超过4个syn ack包，遭到syn泛洪攻击的可能较小。'
+
 
 
 

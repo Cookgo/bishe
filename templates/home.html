@@ -103,17 +103,20 @@
   <script>
 
         function scan(){
+
         data="IP="+document.getElementById('IP').value+"&"+"port="+document.getElementById('port').value+"&"+"thread_num="+document.getElementById('thread_num').value
-        $('#tip').text('正在扫描: '+$('#IP').val()+'  '+$('#port').val()+'     并发数: '+$('#thread_num').val()+' ......')
+
 
         $("table  tr:not(:first)").empty("");
         var req = new XMLHttpRequest();
         req.onreadystatechange = function()
         {
-          if(this.readyState == 4 && this.status == 200){
+          if(this.readyState == 4){
+          if(this.status == 200){
             $('#tip').text('')
-            $("#complete").val("开始扫描")
+            $("#complete").text("开始扫描")
             $("#complete").attr("disabled",false);
+
 
             var temp=JSON.parse(this.responseText);
             var i=1
@@ -127,11 +130,22 @@
                 $('table').find("tr").eq(i).find("td").eq(3).text(res[2])
                 $('table').find("tr").eq(i).find("td").eq(4).text(res[3])
                 i++
+                }
+            }
+            else {
+            $("#complete").text("开始扫描")
+            $('#tip').text('')
+            $("#complete").attr("disabled",false);
+            alert('请求出错，请检查输入格式是否正确')
+
+
+
             }
           } else {
-            $("#complete").val("处理中")
+            $("#complete").text("处理中")
             $("#complete").attr("disabled","true");
-            $("#fast").attr("disabled","true");
+            $('#tip').text('正在扫描: '+$('#IP').val()+'  '+$('#port').val()+'     并发数: '+$('#thread_num').val()+' ......')
+
           }
         }
         req.open('POST', '/scan', true);
@@ -139,24 +153,27 @@
         req.send(data);
       }
 
-        function ftp_brute(){
+        function clear(){
           $('#IP').text('')
           $('#port').text('')
           $('#thread_num').text('')
 
-
-      }
+         }
 
 
     function ftp_brute(){
 
-        $('#ftp_force').val('处理中')
+        $('#test_result').val('正在进行FTP爆破测试......')
+
         $('#ftp_force').attr("disabled","true");
+        $('#ssh_force').attr("disabled","true");
+        $('#dos_attack').attr("disabled","true");
         str={};
         str['IP']=$('#IP').val()
         str['port']=$('#port').val()
         str['thread_num']=$('#thread_num').val()
         <!--alert(str['thread_num'])-->
+
         $.ajax({
             type: 'POST',
             url: '/ftp_brute',
@@ -164,10 +181,14 @@
             success: function(data) {
                 $('#test_result').val(data)
                 $('#ftp_force').attr("disabled",false);
+                $('#ssh_force').attr("disabled",false);
+                $('#dos_attack').attr("disabled",false);
             },
             error: function(xhr, type) {
             $('#test_result').val('请求出错')
             $('#ftp_force').attr("disabled",false);
+            $('#ssh_force').attr("disabled",false);
+            $('#dos_attack').attr("disabled",false);
             }
 });
       }
@@ -175,13 +196,16 @@
 
 function ssh_brute(){
 
-        $('#ssh_force').val('处理中')
+        $('#test_result').val('正在进行SSH爆破测试......')
         $('#ssh_force').attr("disabled","true");
+        $('#ftp_force').attr("disabled","true");
+        $('#dos_attack').attr("disabled","true");
         str={};
         str['IP']=$('#IP').val()
         str['port']=$('#port').val()
         str['thread_num']=$('#thread_num').val()
         <!--alert(str['thread_num'])-->
+
         $.ajax({
             type: 'POST',
             url: '/ssh_brute',
@@ -189,14 +213,53 @@ function ssh_brute(){
             success: function(data) {
                 $('#test_result').val(data)
                 $('#ssh_force').attr("disabled",false);
+                $('#ftp_force').attr("disabled",false);
+                $('#dos_attack').attr("disabled",false);
             },
             error: function(xhr, type) {
             $('#test_result').val('请求出错')
             $('#ssh_force').attr("disabled",false);
+            $('#ftp_force').attr("disabled",false);
+            $('#dos_attack').attr("disabled",false);
             }
 });
       }
 
+
+
+          function dos_test(){
+
+          $('#test_result').val('正在进行DOS攻击测试......')
+          $('#dos_attack').attr("disabled","true");
+          $('#ssh_force').attr("disabled","true");
+          $('#ftp_force').attr("disabled","true");
+          str={};
+          str['IP']=$('#IP').val()
+          str['port']=$('#port').val()
+          
+          $.ajax({
+            type: 'POST',
+            url: '/dos_test',
+            data: str,
+            success: function(data) {
+
+                $('#test_result').val(data)
+                $('#ssh_force').attr("disabled",false);
+                $('#ftp_force').attr("disabled",false);
+                $('#dos_attack').attr("disabled",false);
+            },
+            error: function(xhr, type) {
+
+                $('#test_result').val('请求出错')
+                $('#ssh_force').attr("disabled",false);
+                $('#ftp_force').attr("disabled",false);
+                $('#dos_attack').attr("disabled",false);
+            }
+});
+
+
+
+          }
 
 
   </script>
@@ -217,9 +280,9 @@ function ssh_brute(){
   <hr>
   <form class="pure-form pure-u-1">
     <h4>请输入测试目标参数：</h4>
-    <input type="text" id="IP" value="" placeholder="IP地址" class="pure-input-1-3">
-    <input type="text" id="port" value="" placeholder="端口号" class="pure-input-1-3">
-    <input type="text" id="thread_num" value="" placeholder="线程数" class="pure-input-1-3">
+    <input type="text" id="IP" value="" placeholder="IP地址（如192.168.1.1）" class="pure-input-1-3">
+    <input type="text" id="port" value="" placeholder="端口号(如20,21,1-100)" class="pure-input-1-3">
+    <input type="text" id="thread_num" value="" placeholder="线程数（20以内）" class="pure-input-1-3">
     <br>
     <br>
     <button id="complete" onclick="scan();" class="pure-button pure-button-primary">开始扫描</button>
@@ -267,7 +330,7 @@ function ssh_brute(){
   <form class="pure-form pure-u-1">
     <button class="pure-button button-error" id="ftp_force" onclick="ftp_brute();">FTP爆破测试</button>
     <button class="pure-button button-secondary" id="ssh_force" onclick="ssh_brute();">SSH爆破测试</button>
-    <button class="pure-button button-privary" id="dos_attack" onclick="brute();">DOS攻击测试</button>
+    <button class="pure-button button-privary" id="dos_attack" onclick="dos_test();">DOS攻击测试</button>
     <!--<div id="test_result" class="pure-u-1"></div>-->
   </form>
   <textarea class="pure-u-1" id="test_result" cols="300" rows="10" readonly>Test Result</textarea>
