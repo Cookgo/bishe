@@ -1,18 +1,12 @@
 #! -*- coding:utf-8 -*-
 from scapy.all import *
-# count=0
-# ip = '192.168.80.130'
-# port = 801
-# pkt = IP(dst=ip) / TCP(dport=port, flags='S')
-#
-# sr1(pkt, iface='VMware Virtual Ethernet Adapter for VMnet8',timeout=1)
-#
-def func():
-    a=1
-    print(id(a))
-def func1():
-    a=2
-    print(id(a))
+import paramiko
+# ssh = paramiko.SSHClient()
+# ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+# ssh.connect('192.168.80.130',port=22,username='root',password='12345678')
+# print('chenggong')
 
-func()
-func1()
+ssh = paramiko.SSHClient()
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+ssh.connect('192.168.80.130',22,'root', '12345678')
+print('chenggong')

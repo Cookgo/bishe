@@ -64,7 +64,8 @@ def f_brute():
     nm = nmap.PortScanner()
     p = str(port)
     nm.scan(IP, p)
-    if nm[IP]['tcp'][port]['name'] != 'ftp':
+    if (nm[IP]['tcp'][port]['name'] != 'ftp')or (nm[IP]['tcp'][port]['state']!='open'):
+
         print(nm[IP]['tcp'][port]['name'])
         return '该端口没有ftp服务'
 
@@ -99,7 +100,7 @@ def s_brute():
     nm = nmap.PortScanner()
     p = str(port)
     nm.scan(IP, p)
-    if nm[IP]['tcp'][port]['name'] != 'ssh':
+    if nm[IP]['tcp'][port]['name'] != 'ssh' or nm[IP]['tcp'][port]['state']!='open':
         return '该端口没有ssh服务'
 
     ssh_force.brute(thread_num, IP, port)
