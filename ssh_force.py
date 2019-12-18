@@ -40,10 +40,10 @@ def test(username,password,ip,port):
 
 
 def brute(thread_num,ip,port):
-    with open(r'C:\Users\dkl\Desktop\uuuu.txt', 'r') as f:
+    with open(r'C:\Users\dkl\Desktop\bishe\uuuu.txt', 'r') as f:
         temp = f.readlines()
     username = [str.rstrip() for str in temp]
-    with open(r'C:\Users\dkl\Desktop\pppp.txt', 'r') as f:
+    with open(r'C:\Users\dkl\Desktop\bishe\pppp.txt', 'r') as f:
         temp = f.readlines()
     password = [str.rstrip() for str in temp]
     name=[]
